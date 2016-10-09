@@ -1,3 +1,4 @@
+// Package egotivities provides a Go wrapper around Imperial College Union's eActivities API.
 package egotivities
 
 import (
