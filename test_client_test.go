@@ -1,4 +1,4 @@
-package eactivities
+package egotivities
 
 import (
 	"fmt"
