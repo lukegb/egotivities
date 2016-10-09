@@ -1,0 +1,12 @@
+{
+	"ImportPath": "github.com/lukegb/egotivities",
+	"GoVersion": "go1.7",
+	"GodepVersion": "v74",
+	"Deps": [
+		{
+			"ImportPath": "github.com/d4l3k/messagediff",
+			"Comment": "v1.1.0",
+			"Rev": "7b706999d935b04cf2dbc71a5a5afcbd288aeb48"
+		}
+	]
+}
