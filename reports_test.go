@@ -116,7 +116,7 @@ func TestOnlineSales(t *testing.T) {
 		SaleDateTime:      Time(time.Date(2015, 6, 20, 19, 00, 00, 0, eActivitiesLocation)),
 		ProductID:         1234,
 		ProductLineID:     4567,
-		Price:             30,
+		Price:             newMoney(30),
 		Quantity:          1,
 		QuantityCollected: 0,
 		Customer: Customer{
@@ -129,11 +129,22 @@ func TestOnlineSales(t *testing.T) {
 		VAT: VAT{
 			Code: "S1",
 			Name: "S1 – Sales Standard Rated",
-			Rate: 20,
+			Rate: newMoney(20),
 		},
 	}}
 	if err != nil {
 		t.Errorf("OnlineSales(...): %v", err)
+	}
+	for n, w := range want {
+		g := got[n]
+		if g.Price.Cmp(&w.Price.Float) != 0 {
+			t.Errorf("OnlineSales(...)[%d].Price = %s; want %s", n, g.Price.String(), w.Price.String())
+		}
+		want[n].Price = &Money{g.Price.Float}
+		if g.VAT.Rate.Cmp(&w.VAT.Rate.Float) != 0 {
+			t.Errorf("OnlineSales(...)[%d].VAT.Rate = %s; want %s", n, g.VAT.Rate.String(), w.VAT.Rate.String())
+		}
+		want[n].VAT.Rate = &Money{g.VAT.Rate.Float}
 	}
 	if diff, equal := messagediff.PrettyDiff(want, got); !equal {
 		t.Errorf("OnlineSales(...) = %#v\n%s", got, diff)
@@ -178,7 +189,7 @@ func TestTransactionLines(t *testing.T) {
 		TransDate:   Time(time.Date(2015, 6, 20, 0, 0, 0, 0, eActivitiesLocation)),
 		Document:    "CF 12345 (234567)",
 		Description: "Pens and card for making signs",
-		Amount:      -234,
+		Amount:      newMoney(-234),
 		Funding: Funding{
 			Code: "0",
 			Name: "Grant (0)",
@@ -197,6 +208,13 @@ func TestTransactionLines(t *testing.T) {
 	}}
 	if err != nil {
 		t.Errorf("TransactionLines(...): %v", err)
+	}
+	for n, w := range want {
+		g := got[n]
+		if g.Amount.Cmp(&w.Amount.Float) != 0 {
+			t.Errorf("TransactionLines(...)[%d].Amount = %s; want %s", n, g.Amount.String(), w.Amount.String())
+		}
+		want[n].Amount = &Money{g.Amount.Float}
 	}
 	if diff, equal := messagediff.PrettyDiff(want, got); !equal {
 		t.Errorf("TransactionLines(...) = %#v\n%s", got, diff)

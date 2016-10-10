@@ -1,6 +1,23 @@
 package egotivities
 
-import "fmt"
+import (
+	"fmt"
+	"math/big"
+)
+
+// Money represents an amount of money.
+type Money struct {
+	big.Float
+}
+
+// UnmarshalJSON deserializes eActivities' currency format.
+func (m *Money) UnmarshalJSON(b []byte) error {
+	return m.UnmarshalText(b)
+}
+
+func newMoney(in float64) *Money {
+	return &Money{*big.NewFloat(in)}
+}
 
 // CommitteeMember represents a single member of a CSP committee.
 type CommitteeMember struct {
@@ -57,7 +74,7 @@ type Customer struct {
 type VAT struct {
 	Code string
 	Name string
-	Rate float64
+	Rate *Money
 }
 
 // OnlineSale represents a single online sale of a product.
@@ -66,7 +83,7 @@ type OnlineSale struct {
 	SaleDateTime      Time
 	ProductID         uint64
 	ProductLineID     uint64
-	Price             float64
+	Price             *Money
 	Quantity          uint
 	QuantityCollected uint
 	Customer          Customer
@@ -107,7 +124,7 @@ type TransactionLine struct {
 	TransDate   Time
 	Document    string
 	Description string
-	Amount      float64
+	Amount      *Money
 	Funding     Funding
 	Activity    Activity
 	Account     Account
